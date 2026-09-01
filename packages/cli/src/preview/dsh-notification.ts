@@ -1,4 +1,5 @@
-import { accessSync, appendFileSync, constants } from 'node:fs'
+import { accessSync, constants } from 'node:fs'
+import { appendFile } from 'node:fs/promises'
 import { isAbsolute } from 'node:path'
 import type { PreviewAgentNotificationRegistration } from './contract.js'
 import type {
@@ -74,7 +75,7 @@ export function dshWakeRecord(event: PreviewBatchReadyEvent): string {
 export type DshWakeWriter = (path: string, record: string) => Promise<void>
 
 async function defaultWakeWriter(path: string, record: string): Promise<void> {
-  appendFileSync(path, `${record}\n`)
+  await appendFile(path, `${record}\n`, { encoding: 'utf8' })
 }
 
 export function createDshSessionFileAdapter(

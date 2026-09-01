@@ -1,4 +1,5 @@
-import { appendFileSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
+import { appendFile } from 'node:fs/promises'
 import type { PreviewAgentNotificationRegistration } from './contract.js'
 import type {
   PreviewAgentAdapter,
@@ -67,7 +68,7 @@ export type PiWakeWriter = (
 ) => Promise<void>
 
 async function defaultWakeWriter(path: string, record: string): Promise<void> {
-  appendFileSync(path, `${record}\n`)
+  await appendFile(path, `${record}\n`, { encoding: 'utf8' })
 }
 
 export function createPiSessionFileAdapter(
