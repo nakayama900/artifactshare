@@ -41,6 +41,18 @@ import {
   codexNotificationRegistration,
   createCodexQueueAdapter,
 } from '../preview/codex-notification.js'
+import {
+  opencodeNotificationRegistration,
+  createOpenCodeSessionAdapter,
+} from '../preview/opencode-notification.js'
+import {
+  piNotificationRegistration,
+  createPiSessionFileAdapter,
+} from '../preview/pi-notification.js'
+import {
+  dshNotificationRegistration,
+  createDshSessionFileAdapter,
+} from '../preview/dsh-notification.js'
 import { claudeNotificationRegistration } from '../preview/claude-notification.js'
 import {
   CURSOR_ACP_NOTIFICATION_TIMEOUT_MS,
@@ -56,6 +68,39 @@ function previewNotificationForEnvironment() {
       adapter:
         codex.capability === 'push' && codex.target !== null
           ? createCodexQueueAdapter(codex.target)
+          : undefined,
+      timeoutMs: undefined,
+    }
+  }
+  const opencode = opencodeNotificationRegistration()
+  if (opencode) {
+    return {
+      registration: opencode,
+      adapter:
+        opencode.capability === 'push' && opencode.target !== null
+          ? createOpenCodeSessionAdapter(opencode.target)
+          : undefined,
+      timeoutMs: undefined,
+    }
+  }
+  const pi = piNotificationRegistration()
+  if (pi) {
+    return {
+      registration: pi,
+      adapter:
+        pi.capability === 'push' && pi.target !== null
+          ? createPiSessionFileAdapter(pi.target)
+          : undefined,
+      timeoutMs: undefined,
+    }
+  }
+  const dsh = dshNotificationRegistration()
+  if (dsh) {
+    return {
+      registration: dsh,
+      adapter:
+        dsh.capability === 'push' && dsh.target !== null
+          ? createDshSessionFileAdapter(dsh.target)
           : undefined,
       timeoutMs: undefined,
     }
